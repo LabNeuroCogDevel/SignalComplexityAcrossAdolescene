@@ -1,3 +1,33 @@
+
+library(LNCDR)
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(e1071)
+library(caret)
+attach(mtcars)
+library(grid)
+library(gridExtra)
+library(plotrix)
+library(mgcv)
+library(readxl)
+library(lme4)
+library(lubridate)
+library(checkmate)
+library(lmerTest)
+library(tidyr)
+library(jtools)
+library(tvem)
+library(interactions)
+library(akima)
+library(mice)
+
+outliers <- function(x) {
+  (abs(x - mean(x, na.rm= T)) > (sd(x, na.rm= T) * 2))
+}
+naoutlier <- function(x) ifelse(outliers(x), NA, x)
+
+
 # MSE Entropy 20 ----
 
 entropy <- read.csv('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/Results/allSubjects_allChans_MSE20.csv') %>% select(c(-type))
@@ -7,6 +37,7 @@ entropy_outlier <- entropy %>% group_by(Subject) %>%
   mutate(across(c("MSx1", "MSx2", "MSx3", "MSx4", "MSx5", "MSx6", 
                   "MSx7", "MSx8", "MSx9", "MSx10", "MSx11", "MSx12", "MSx13", "MSx14", 
                   "MSx15", "MSx16", "MSx17", "MSx18", "MSx19", "MSx20", "Var1"), naoutlier)) %>% ungroup()
+
 
 merge7t <- read.csv('/Volumes/Hera/Projects/7TBrainMech/scripts/txt/merged_7t.csv')
 ageValues <- merge7t[c("lunaid","eeg.date","visitno","eeg.age")]
@@ -105,7 +136,7 @@ ggeffects::hypothesis_test(interactionmodel,  terms = c("timeScale_factor[2,18]"
 
 
 
-e# Find each subjects max entropy value on the MSE curve 
+# Find each subjects max entropy value on the MSE curve ----
 subs = unique(entropyAgeAvg_outlier_long$lunaID)
 visits = unique(entropyAgeAvg_outlier_long$visitno)
 
@@ -152,7 +183,6 @@ summary(gam.model$gam)
 
 # MSE Entropy vs FOOOF ----
 
-
 ## Load and avg fooof across all electrodes ----
 fooofAllchans <- read.csv('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Aperiodic_MRS_Development/Results/allSubjectsAllChannelsFooofMeasures_20230911.csv')
 
@@ -170,7 +200,11 @@ MSEfooof <- merge(fooofAvg_outlier, entropyAgeAvg_outlier_long, by = c('lunaID',
   merge(.,  maxValuesAge, by = c("lunaID", "visitno", "age")) %>% mutate(timeScale = (as.numeric(timeScale)))
 
 
-lunaize(ggplot(data = MSEfooof %>% filter(Condition == 'eyesOpen') %>% filter(timeScale >=14 & timeScale<=20) %>% filter(age>18), aes(x = Exponent, y = MSx))+ 
+lunaize(ggplot(data = MSEfooof %>% filter(Condition == 'eyesOpen') %>% filter(timeScale >=14 & timeScale<=20), aes(x = Exponent, y = MSx))+ geom_point()+
+          geom_smooth(aes(group = timeScale, color = timeScale), 
+                      method= "loess", alpha=0.2, linewidth=2))
+
+lunaize(ggplot(data = MSEfooof %>% filter(Condition == 'eyesOpen') %>% filter(timeScale <=10), aes(x = Exponent, y = MSx))+ 
           geom_smooth(aes(group = timeScale, color = timeScale), 
                       method= "loess", alpha=0.2, linewidth=2))
 

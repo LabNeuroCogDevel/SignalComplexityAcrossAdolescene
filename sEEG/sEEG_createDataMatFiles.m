@@ -1,10 +1,10 @@
 
-addpath(('/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/1. Recording & Stimulation of iEEG - pbelchps files/Image Reconstruction/customFcns'))
+addpath(('/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/seeg/Image Reconstruction/customFcns'))
 addpath(genpath('/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/abelCode/ripple/Tools/neuroshare'))
 
-datapath = ('/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/PBE Lab/sEEG_backup/sEEG_rawData/');
-patientAnatPath = ('/Users/shanemckeon/Library/CloudStorage/OneDrive - University of Pittsburgh/1. Recording & Stimulation of iEEG - pbelchps files/Image Reconstruction/patients/');
-savePath = ('/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/PBE Lab/sEEG_backup/sEEG_rawData/');
+datapath = ('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/sEEG/sEEG_rawData/');
+patientAnatPath = ('/Users/shanemckeon/Library/CloudStorage/OneDrive - University of Pittsburgh/seeg/Image Reconstruction/patients/');
+savePath = ('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/sEEG/sEEG_rawData/');
 
 %load in all the files
 setfiles0 = dir([datapath, 'P*/Rest/rest*ns2*']);
@@ -16,13 +16,13 @@ for epo = 1:length(setfiles0)
 end
 
 for j = 1:length(setfiles0)
-    idvalues(j,:) = (setfiles0(j).folder(106:112));
+    idvalues(j,:) = (setfiles0(j).folder(80:86));
     disp(idvalues(j,:))
     if isfile([savePath, idvalues(j,:), '/Rest/data.mat']) % is there a .mat file for the patient
         continue
     else % no .mat file for patient. we need to make it
         [nsResult,hFile] = ns_OpenFile(fullfile([setfiles0(j).folder,'/', setfiles0(j).name]));
-        mtgTbl = readtable(fullfile([datapath, idvalues(j,:), '/Rest/montage', idvalues(j,:),'.xlsx']));
+        mtgTbl = readtable(fullfile([datapath, idvalues(j,:), '/montage', idvalues(j,:),'.xlsx']));
         [chans,isort] = sort(mtgTbl{~isnan(mtgTbl{:,1}),2});
         info.chanNames = chans;
         % get indices of all channels labeled 'lfp #'

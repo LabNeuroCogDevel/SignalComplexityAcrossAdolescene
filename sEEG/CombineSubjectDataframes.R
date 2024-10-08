@@ -23,10 +23,10 @@ library(jtools)
 # Initialize directory and empty dataframes ----
 
 # Set your working directory to the folder containing your CSV files
-setwd('/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/PBE Lab/entropy/individualSubjectFiles/')
+setwd('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/sEEG/Results/individualSubFiles/')
 
 # List all CSV files in the directory
-csv_files <- list.files(pattern = "permEntropy.csv")
+csv_files <- list.files(pattern = "MultiScaleEntropy20_referenced.csv")
 
 # Initialize an empty data frame to store the combined data
 combined_data <- data.frame()
@@ -38,4 +38,4 @@ for (file in csv_files) {
 }
 
 
-write.csv(combined_data, file = '/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/PBE Lab/entropy/allSubjectsEntropy.csv', row.names = F)
+write.csv(combined_data, file = '/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/sEEG/Results/5Mins_MSE20_allSubjects.csv', row.names = F)

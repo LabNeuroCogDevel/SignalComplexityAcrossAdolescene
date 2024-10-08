@@ -3,7 +3,6 @@
 library(LNCDR)
 library(data.table)
 library(dplyr)
-library(factoextra)
 library(ggplot2)
 library(e1071)
 library(caret)
@@ -19,16 +18,15 @@ library(checkmate)
 library(lmerTest)
 library(tidyr)
 library(jtools)
-library(eegUtils)
 library(tvem)
 library(interactions)
 library(akima)
 library(mice)
 
 
-entropy <- read.csv('/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/PBE Lab/entropy/allSubjectsEntropy.csv')
+entropy <- read.csv('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/sEEG/Results/5Mins_MSE20_allSubjects.csv')
 
-nonEpContacts <- read.csv('/Users/shanemckeon/Library/CloudStorage/OneDrive-UniversityofPittsburgh/PBE Lab/nonEPcontacts.csv')
+nonEpContacts <- read.csv('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/sEEG/Results/nonEPcontacts.csv')
 
 # List of subjects
 subjects <-intersect(unique(nonEpContacts$Subject), unique(entropy$Subject))
