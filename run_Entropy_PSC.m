@@ -1,13 +1,9 @@
 
 function [subjectTable] = run_Entropy_PSC(inputfile, task, epoch, lengthValue, varargin)
 
-addpath(genpath(('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/resources/eeglab2022.1')));
-addpath(('/Volumes/Hera/Projects/7TBrainMech/scripts/fieldtrip-20220104'))
+addpath(genpath(('/ocean/projects/soc230004p/shared/SignalComplexityAcrossAdolescene/resources/eeglab2022.1')));
+addpath(('/ocean/projects/soc230004p/shared/SignalComplexityAcrossAdolescene/resources/fieldtrip-20220104'))
 ft_defaults
-
-maindir = ('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/preprocessed_data');
-
-dataDirectory = [maindir '/' task];
 
 if task == 'MGS'
     resultFolder = 'MGS_Entropy';
@@ -15,7 +11,7 @@ elseif task == 'rest'
     resultFolder = 'entropy';
 end
 
-resultPath = ('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/Results');
+resultPath = ('/ocean/projects/soc230004p/shared/SignalComplexityAcrossAdolescene/Results');
 
 savePath = [resultPath '/' resultFolder '/individual_subject_files/'];
 
@@ -54,6 +50,7 @@ if strcmp(task, 'MGS') && strcmp(epoch, 'delay')
                 EEG.event(e).type = ['4_' num2str((EEG.event(e).duration))];
             end
         end
+
         try
 
             if lengthValue == 6
@@ -107,8 +104,7 @@ if strcmp(task, 'MGS') && strcmp(epoch, 'delay')
             end
 
             if (length(delayEEG.event) == length(EEG.event)) || (length(delayEEG.event) < 50 && lengthValue == 6) || (length(delayEEG.event) < 20 && lengthValue == 8)|| (length(delayEEG.event) < 5 && lengthValue == 10)
-                didntRun{i} = inputfile;
-                continue; % Move to next person in the loop if no events were removed
+                return; % Move to next person in the loop if no events were removed
             end
 
 
@@ -124,8 +120,7 @@ if strcmp(task, 'MGS') && strcmp(epoch, 'delay')
             subjectSavePath = [savePath idvalues(i,:) '_MultiScaleEntropy_delay' num2str(lengthValue) '.csv'];
             writetable(subjectTable, subjectSavePath);
         catch
-            didntRun{i} = inputfile;
-            continue;
+            return;
         end
 
 
