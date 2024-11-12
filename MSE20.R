@@ -30,7 +30,7 @@ naoutlier <- function(x) ifelse(outliers(x), NA, x)
 
 # MSE Entropy 20 ----
 
-entropy <- read.csv('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/Results/allSubjects_allChans_MSE20.csv') %>% select(c(-type))
+entropy <- read.csv('/Volumes/Hera/Projects/7TBrainMech/scripts/eeg/Shane/Entropy/Results/entropy/allSubjects_allChans_MSE20.csv') %>% select(c(-type))
 
 # Entropy Outlier Detection ----
 entropy_outlier <- entropy %>% group_by(Subject) %>%
@@ -68,11 +68,11 @@ entropyAgeAvg_outlier_long <- entropyAgeAvg_outlier %>%
                                     "MSx7", "MSx8", "MSx9", "MSx10", "MSx11", "MSx12", "MSx13", "MSx14", 
                                     "MSx15", "MSx16", "MSx17", "MSx18", "MSx19", "MSx20")),
                names_to = c(".value", "timeScale"),
-               names_pattern = "(\\D+)(\\d+)") %>%  mutate(ageGroup = cut(age, c(0,13,16,19,Inf), labels = c('10-12','13-15','16-18','Adults'))) %>%
+               names_pattern = "(\\D+)(\\d+)") %>%  mutate(ageGroup = cut(age, c(0,19,Inf), labels = c('Adol','Adults'))) %>%
   mutate(timeScale = as.numeric(timeScale))
 
 
-lunaize(ggplot(data = entropyAgeAvg_outlier_long, aes(x = as.numeric(timeScale), y = MSx)) + geom_point(aes(color = ageGroup)) +
+lunaize(ggplot(data = entropyAgeAvg_outlier_long, aes(x = as.numeric(timeScale), y = MSx)) +
           geom_smooth(aes(group = ageGroup, color = ageGroup), method=mgcv::"gam", 
                       formula = y ~ s(x, k = 5, fx = T), alpha=0.4, linewidth=1)) + xlab("Time Scale")
 

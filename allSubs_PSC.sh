@@ -1,0 +1,2 @@
+for inputfile in *.set
+
