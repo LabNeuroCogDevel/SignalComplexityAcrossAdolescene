@@ -1,7 +1,7 @@
 function [subjectTable] = Calculate_EEG_Entropy_Values(inputEEG, varargin)
 
 %% multiscale entropy
-parpool('local', 15);
+parpool('local', 64);
 
 parfor c = 1:size(inputEEG.data, 1)
 

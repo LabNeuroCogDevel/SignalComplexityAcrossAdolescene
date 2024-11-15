@@ -20,7 +20,7 @@ EEG = pop_loadset(inputfile); % load in eeg file
 
 
 if strcmp(task, 'MGS') && strcmp(epoch, 'delay')
-    if ~isfile([savePath idvalues(i,:) '_MultiScaleEntropy_delay' num2str(lengthValue) '.csv'])
+    if ~isfile([savePath currentName(1:14) '_MultiScaleEntropy_delay' num2str(lengthValue) '.csv'])
 
         if size(EEG.data,1) > 64
             EEG = pop_select( EEG,'nochannel',{'EX3' 'EX4' 'EX5' 'EX6' 'EX7' 'EX8' 'EXG1' 'EXG2' 'EXG3' 'EXG4' 'EXG5' 'EXG6' 'EXG7' 'EXG8' 'GSR1' 'GSR2' 'Erg1' 'Erg2' 'Resp' 'Plet' 'Temp' 'FT7' 'FT8' 'TP7' 'TP8' 'TP9' 'TP10'});
@@ -104,22 +104,24 @@ if strcmp(task, 'MGS') && strcmp(epoch, 'delay')
             end
 
             if (length(delayEEG.event) == length(EEG.event)) || (length(delayEEG.event) < 50 && lengthValue == 6) || (length(delayEEG.event) < 20 && lengthValue == 8)|| (length(delayEEG.event) < 5 && lengthValue == 10)
-                return; % Move to next person in the loop if no events were removed
+               disp("too few triggers")
+		    return; % Move to next person in the loop if no events were removed
             end
 
 
             [subjectTable] = Calculate_EEG_Entropy_Values(delayEEG);
 
             % Create a new column with subject ID repeated for every row
-            subjectIDColumn = repmat(idvalues(i,:), size(subjectTable, 1),1);
+            subjectIDColumn = repmat(currentName(1:14), size(subjectTable, 1),1);
 
             % Add the new column to the existing table
             subjectTable = [table(subjectIDColumn, 'VariableNames', {'Subject'}), subjectTable];
 
 
-            subjectSavePath = [savePath idvalues(i,:) '_MultiScaleEntropy_delay' num2str(lengthValue) '.csv'];
+            subjectSavePath = [savePath currentName(1:14) '_MultiScaleEntropy_delay' num2str(lengthValue) '.csv'];
             writetable(subjectTable, subjectSavePath);
         catch
+		disp("did not run")
             return;
         end
 
