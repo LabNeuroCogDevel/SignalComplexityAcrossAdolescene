@@ -3,6 +3,8 @@ function [subjectTable] = run_Entropy_PSC(inputfile, task, epoch, lengthValue, v
 
 addpath(genpath(('/ocean/projects/soc230004p/shared/SignalComplexityAcrossAdolescene/resources/eeglab2022.1')));
 addpath(('/ocean/projects/soc230004p/shared/SignalComplexityAcrossAdolescene/resources/fieldtrip-20220104'))
+addpath(genpath('/ocean/projects/soc230004p/shared/SignalComplexityAcrossAdolescene/resources/entropyHub_v2.0.0'))
+
 ft_defaults
 
 if task == 'MGS'
@@ -110,16 +112,24 @@ if strcmp(task, 'MGS') && strcmp(epoch, 'delay')
 
 
             [subjectTable] = Calculate_EEG_Entropy_Values(delayEEG);
+            disp("entropy ran")
 
             % Create a new column with subject ID repeated for every row
             subjectIDColumn = repmat(currentName(1:14), size(subjectTable, 1),1);
+		disp("subject column made")
 
             % Add the new column to the existing table
             subjectTable = [table(subjectIDColumn, 'VariableNames', {'Subject'}), subjectTable];
-
+		disp("subject table made")
 
             subjectSavePath = [savePath currentName(1:14) '_MultiScaleEntropy_delay' num2str(lengthValue) '.csv'];
-            writetable(subjectTable, subjectSavePath);
+           
+	    disp("subjectsavepath")
+	    
+	   writetable(subjectTable, subjectSavePath);
+	    
+	    disp("writetable")
+
         catch
 		disp("did not run")
             return;

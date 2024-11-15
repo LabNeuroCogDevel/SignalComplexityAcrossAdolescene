@@ -6,5 +6,5 @@
 
 # Bash script for running MSE on the supercomputer for the Entropy project
 module load matlab
-matlab -nodesktop -r "run_Entropy_PSC('$INPUTFILE','MGS', 'delay', 6)"
+matlab -nodesktop -r "run_Entropy_PSC('$INPUTFILE','MGS', 'delay', 6);"
 
