@@ -72,6 +72,7 @@ for i = 1:length(setfiles0)
                     EEG.event(e).type = ['4_' num2str((EEG.event(e).duration))];
                 end
             end
+           
             try
 
                 if lengthValue == 6
